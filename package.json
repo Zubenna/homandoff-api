@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "ecommerce backend",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
@@ -19,8 +19,5 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.0",
     "nodemon": "^2.0.19"
-  },
-  "engines": {
-    "node": "17.9.0"
   }
 }
