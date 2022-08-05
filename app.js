@@ -38,11 +38,32 @@ app.use('/api/order', orderRoute);
 
 app.get('/', (req, res) => {
   res.send('Testing my API ');
+  // res.redirect('/api/auth/createUser');
 });
 
-app.get('/url', (req, res) => {
-  res.json(['Tony', 'Lisa', 'Michael', 'Ginger', 'Food']);
-});
+// app.get('/user', (req, res) => {
+//   // res.send('Testing my API ');
+//   res.redirect('/api/user');
+// });
+
+// app.get('/product', (req, res) => {
+//   // res.send('Testing my API ');
+//   res.redirect('/api/product');
+// });
+
+// app.get('/cart', (req, res) => {
+//   // res.send('Testing my API ');
+//   res.redirect('/api/cart');
+// });
+
+// app.get('/order', (req, res) => {
+//   // res.send('Testing my API ');
+//   res.redirect('/api/order');
+// });
+
+// app.get('/url', (req, res) => {
+//   res.json(['Tony', 'Lisa', 'Michael', 'Ginger', 'Food']);
+// });
 
 // app.get('/', (req, res) => {
 //   res.redirect('/url');
