@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "ecommerce backend",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.0",
     "nodemon": "^2.0.19"
+  },
+  "engines": {
+    "node": "17.9.0"
   }
 }
