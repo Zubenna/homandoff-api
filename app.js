@@ -36,17 +36,21 @@ app.use('/api/auth', authRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/order', orderRoute);
 
-app.get('/', (req, res) => {
-  res.send('Testing my API ');
-});
+// app.get('/', (req, res) => {
+//   res.send('Testing my API ');
+// });
 
 app.get('/url', (req, res) => {
   res.json(['Tony', 'Lisa', 'Michael', 'Ginger', 'Food']);
 });
 
-app.listen(6050, () => {
-  // console.log(`app is listening on port ${process.env.PORT}`);
-  console.log(`app is listening on port 6050}`);
+app.get('/', (req, res) => {
+  res.redirect('/url');
 });
+
+// app.listen(process.env.PORT, () => {
+//   console.log(`app is listening on port ${process.env.PORT}`);
+//   // console.log(`app is listening on port 6050}`);
+// });
 
 module.exports = app;
