@@ -101,7 +101,7 @@ router.post('/createUser', async (req, res) => {
 });
 
 router.post('/loginUser', async (req, res) => {
-  // console.log('Trying to log in from hosted API');
+  console.log('Trying to log in from hosted API');
   try {
     // Get user input
     let { email, password } = req.body;
@@ -144,7 +144,7 @@ router.post('/loginUser', async (req, res) => {
 
     return res.status(400).send({ msg: 'Invalid credentials' });
   } catch (err) {
-    res.send({ msg: 'There is error logging in' });
+    // res.send({ msg: 'There is error logging in' });
   }
 });
 
