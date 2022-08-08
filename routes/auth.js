@@ -101,18 +101,21 @@ router.post('/createUser', async (req, res) => {
 });
 
 router.post('/loginUser', async (req, res) => {
-  console.log('Trying to log in from hosted API');
+  // console.log('Trying to log in from hosted API');
   try {
     // Get user input
     let { email, password } = req.body;
+    console.log(email);
+    console.log(password);
 
     // Validate user input
     if (!(email && password)) {
       return res.status(400).send({ msg: 'Enter your login details' });
     }
-
+    console.log('After login validation');
     // Validate if user exist in our database
     const user = await User.findOne({ email });
+    console.log(user, 'After searching the database');
     !user && res.status(401).send('Wrong credentials!');
     if (user && (await bcrypt.compare(password, user.password))) {
       //  Create token
