@@ -101,25 +101,22 @@ router.post('/createUser', async (req, res) => {
 });
 
 router.post('/loginUser', async (req, res) => {
-  // console.log('Trying to log in from hosted API');
   try {
     // Get user input
     let { email, password } = req.body;
-    // console.log(email);
-    // console.log(password);
 
     // Validate user input
     if (!(email && password)) {
       return res.status(400).send({ msg: 'Enter your login details' });
     }
-    // console.log('After login validation');
+
     // Validate if user exist in our database
     const user = await User.findOne({ email });
-    // console.log(user, 'After searching the database');
+
     !user && res.status(401).send('Wrong credentials!');
     if (user && (await bcrypt.compare(password, user.password))) {
       //  Create token
-      console.log('Started creating token');
+
       const accessToken = jwt.sign(
         {
           id: user._id,
@@ -128,9 +125,9 @@ router.post('/loginUser', async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: '2d' }
       );
-      console.log('After creating token');
+
       user.token = accessToken;
-      console.log(user.token, 'Token');
+
       //   await generateToken(res, id, email);
       // console.log(accessToken);
       // Store user details in session
@@ -140,15 +137,15 @@ router.post('/loginUser', async (req, res) => {
       //     phone_number: user.phone_number,
       //     email: user.email,
       //   };
-      // const { password, ...others } = user._doc;
-      // res.status(200).send({ ...others });
-      res.status(200).send({ msg: 'You are logged in' });
+      const { password, ...others } = user._doc;
+      res.status(200).send({ ...others });
+      // res.status(200).send({ msg: 'You are logged in' });
       return;
     }
 
     return res.status(400).send({ msg: 'Invalid credentials' });
   } catch (err) {
-    // res.send({ msg: 'There is error logging in' });
+    res.send({ msg: 'There is error logging in' });
   }
 });
 
