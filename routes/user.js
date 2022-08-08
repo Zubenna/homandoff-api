@@ -7,43 +7,39 @@ const {
 const router = require('express').Router();
 
 //UPDATE  verifyTokenAndAuthorization
-router.patch(
-  '/updateUser/:id',
-  verifyTokenAndAuthorization,
-  async (req, res) => {
-    console.log(req.body);
-    // let {
-    //   first_name,
-    //   last_name,
-    //   username,
-    //   email,
-    //   address,
-    //   // password,
-    //   // confirm_password,
-    //   phone_number,
-    //   isAdmin,
-    // } = req.body;
-    // if (password === confirm_password) {
-    //   const salt = await bcrypt.genSalt(10);
-    //   password = await bcrypt.hash(password, salt);
-    // } else {
-    //   res.status(400).send('Password must match');
-    //   return;
-    // }
-    try {
-      await User.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        }
-        // { new: true }
-      );
-      res.status(200).send('User updated sucessfully');
-    } catch (err) {
-      res.status(500).send('Error updating user');
-    }
+router.patch('/updateUser/:id', async (req, res) => {
+  console.log(req.body);
+  // let {
+  //   first_name,
+  //   last_name,
+  //   username,
+  //   email,
+  //   address,
+  //   // password,
+  //   // confirm_password,
+  //   phone_number,
+  //   isAdmin,
+  // } = req.body;
+  // if (password === confirm_password) {
+  //   const salt = await bcrypt.genSalt(10);
+  //   password = await bcrypt.hash(password, salt);
+  // } else {
+  //   res.status(400).send('Password must match');
+  //   return;
+  // }
+  try {
+    await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      }
+      // { new: true }
+    );
+    res.status(200).send('User updated sucessfully');
+  } catch (err) {
+    res.status(500).send('Error updating user');
   }
-);
+});
 
 //DELETE
 router.delete(
@@ -71,7 +67,7 @@ router.get('/getUser/:id', verifyTokenAndAdmin, async (req, res) => {
 });
 
 //GET ALL USER    //verifyTokenAndAdmin,
-router.get('/getAllUsers', verifyTokenAndAdmin, async (req, res) => {
+router.get('/getAllUsers', async (req, res) => {
   const query = req.query.new;
   try {
     const users = query
@@ -83,8 +79,8 @@ router.get('/getAllUsers', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//GET USER STATS
-router.get('/getStats', verifyTokenAndAdmin, async (req, res) => {
+//GET USER STATS      //verifyTokenAndAdmin,
+router.get('/getStats', async (req, res) => {
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
 

@@ -8,7 +8,7 @@ dotenv.config();
 
 router.post('/createUser', async (req, res) => {
   // Get user details
-  console.log('Tracking Register Error');
+  // console.log('Tracking Register Error');
   try {
     let {
       first_name,
@@ -101,6 +101,7 @@ router.post('/createUser', async (req, res) => {
 });
 
 router.post('/loginUser', async (req, res) => {
+  // console.log('Trying to log in from hosted API');
   try {
     // Get user input
     let { email, password } = req.body;
@@ -136,8 +137,8 @@ router.post('/loginUser', async (req, res) => {
       //     email: user.email,
       //   };
       const { password, ...others } = user._doc;
-      res.status(200).send({ ...others });
-      // res.status(200).send({ msg: 'You are logged in' });
+      // res.status(200).send({ ...others });
+      res.status(200).send({ msg: 'You are logged in' });
       return;
     }
 
