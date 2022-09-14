@@ -10,6 +10,6 @@ router.route('/updateOrder/:id').patch(verifyJWT, orderController.updateOrder);
 router.route('/deleteOrder/:id').delete(verifyJWT, orderController.deleteOrder);
 router
   .route('/monthlyIncome')
-  .get(verifyTokenAndAdmin, orderController.monthlyIncome);
+  .get(orderController.monthlyIncome);
 
 module.exports = router;
