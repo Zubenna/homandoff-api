@@ -13,7 +13,6 @@ const productSchema = mongoose.Schema(
 
     price: {
       type: Number,
-      default: 0,
       required: true,
     },
 
@@ -40,17 +39,17 @@ const productSchema = mongoose.Schema(
     modelNo: {
       type: String,
       default: null,
-      required: true,
+      
     },
     skuNo: {
       type: String,
       default: null,
-      required: true,
+      
     },
 
     image: {
       type: String,
-      required: [true, 'Upload your picture please'],
+      required: [true, 'Upload product image please'],
     },
 
     type: {

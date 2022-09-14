@@ -1,163 +1,196 @@
-const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const { verifyToken, verifyTokenAndAdmin } = require('../middleware/checkAuth');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const dotenv = require('dotenv');
-dotenv.config();
+// const router = require('express').Router();
+// const jwt = require('jsonwebtoken');
+// // const { verifyToken, verifyTokenAndAdmin } = require('../middleware/checkAuth');
+// const bcrypt = require('bcryptjs');
+// const User = require('../models/User');
+// const dotenv = require('dotenv');
+// dotenv.config();
 
-router.post('/createUser', async (req, res) => {
-  // Get user details
-  // console.log('Tracking Register Error');
-  try {
-    let {
-      first_name,
-      last_name,
-      username,
-      email,
-      address,
-      password,
-      confirm_password,
-      phone_number,
-      isAdmin,
-    } = req.body;
+// router.post('/createUser', async (req, res) => {
+//   // Get user details
+//   // console.log('Tracking Register Error');
+//   try {
+//     let {
+//       first_name,
+//       last_name,
+//       username,
+//       email,
+//       address,
+//       password,
+//       confirm_password,
+//       phone_number,
+//     } = req.body;
 
-    // Vallidate number of phone digits
-    let myRegex = /^[0-9]{11}$/;
-    if (!phone_number.match(myRegex)) {
-      res.status(400).send({ msg: 'Phone number must be 11 digits only' });
-      return;
-    }
+//     // Vallidate number of phone digits
+//     let myRegex = /^[0-9]{11}$/;
+//     if (!phone_number.match(myRegex)) {
+//       res.status(400).send({ msg: 'Phone number must be 11 digits only' });
+//       return;
+//     }
 
-    // Check required fields
-    if (
-      !(
-        first_name &&
-        last_name &&
-        email &&
-        address &&
-        password &&
-        confirm_password &&
-        phone_number
-      )
-    ) {
-      res.status(400).send({ msg: 'Required fields must not be empty' });
-      return;
-    }
+//     // Check required fields
+//     if (
+//       !(
+//         first_name &&
+//         last_name &&
+//         email &&
+//         address &&
+//         password &&
+//         confirm_password &&
+//         phone_number
+//       )
+//     ) {
+//       res.status(400).send({ msg: 'Required fields must not be empty' });
+//       return;
+//     }
 
-    // Check dupllicate email
-    const existingEmail = await User.findOne({ email });
-    if (existingEmail) {
-      res.status(400).send({ msg: 'Email already exist' });
-      return;
-    }
+//     // Check dupllicate email
+//     const existingEmail = await User.findOne({ email });
+//     if (existingEmail) {
+//       res.status(400).send({ msg: 'Email already exist' });
+//       return;
+//     }
 
-    // Check dupllicate username
-    const existingUname = await User.findOne({ username });
-    if (existingUname) {
-      res.status(400).send({ msg: 'Username already exist' });
-      return;
-    }
+//     // Check dupllicate username
+//     const existingUname = await User.findOne({ username });
+//     if (existingUname) {
+//       res.status(400).send({ msg: 'Username already exist' });
+//       return;
+//     }
 
-    // Check username length
-    const nameLength = username.length;
-    if (!(nameLength >= 6 && nameLength < 16)) {
-      res
-        .status(400)
-        .send({ msg: 'Username must be in the range 8 - 15 characters' });
-      return;
-    }
+//     // Check username length
+//     const nameLength = username.length;
+//     if (!(nameLength >= 6 && nameLength < 16)) {
+//       res
+//         .status(400)
+//         .send({ msg: 'Username must be in the range 8 - 15 characters' });
+//       return;
+//     }
 
-    // Check dupllicate phone number
-    const existingNumber = await User.findOne({ phone_number });
-    if (existingNumber) {
-      res.status(400).send({ msg: 'Phone Number already exist' });
-      return;
-    }
-    // Confirm and Encrypt password
-    if (password === confirm_password) {
-      const salt = await bcrypt.genSalt(10);
-      password = await bcrypt.hash(password, salt);
-    } else {
-      res.status(400).send({ msg: 'Password must match' });
-      return;
-    }
-    // console.log("Tracking Befor Create")
-    // Create user
-    const user = await User.create({
-      first_name,
-      last_name,
-      username,
-      email,
-      address,
-      password,
-      phone_number,
-      isAdmin,
-    });
-    return res.status(200).send({ msg: 'Account created successfully' });
-  } catch (err) {
-    res.status(500).send({ msg: 'Error occurred during registration' });
-  }
-});
+//     // Check dupllicate phone number
+//     const existingNumber = await User.findOne({ phone_number });
+//     if (existingNumber) {
+//       res.status(400).send({ msg: 'Phone Number already exist' });
+//       return;
+//     }
+//     // Confirm and Encrypt password
+//     if (password === confirm_password) {
+//       const salt = await bcrypt.genSalt(10);
+//       password = await bcrypt.hash(password, salt);
+//     } else {
+//       res.status(400).send({ msg: 'Password must match' });
+//       return;
+//     }
+//     // console.log("Tracking Befor Create")
+//     // Create user
+//     const user = await User.create({
+//       first_name,
+//       last_name,
+//       username,
+//       email,
+//       address,
+//       password,
+//       phone_number,
+//     });
+//     return res.status(200).send({ msg: 'Account created successfully' });
+//   } catch (err) {
+//     res.status(500).send({ msg: 'Error occurred during registration' });
+//   }
+// });
 
-router.post('/loginUser', async (req, res) => {
-  try {
-    // Get user input
-    let { email, password } = req.body;
+// router.post('/loginUser', async (req, res) => {
+//   try {
+//     // Get user input
+//     let { email, password } = req.body;
 
-    // Validate user input
-    if (!(email && password)) {
-      return res.status(400).send({ msg: 'Enter your login details' });
-    }
+//     // Validate user input
+//     if (!(email && password)) {
+//       return res.status(400).send({ msg: 'Enter your login details' });
+//     }
 
-    // Validate if user exist in our database
-    const user = await User.findOne({ email });
+//     // Validate if user exist in our database
+//     const user = await User.findOne({ email });
 
-    !user && res.status(401).send('Wrong credentials!');
-    if (user && (await bcrypt.compare(password, user.password))) {
-      //  Create token
+//     !user && res.status(401).send('Wrong credentials!');
+//     if (user && (await bcrypt.compare(password, user.password))) {
+//       //  Create token
 
-      const accessToken = jwt.sign(
-        {
-          id: user._id,
-          isAdmin: user.isAdmin,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '2d' }
-      );
+//       const roles = Object.values(user.roles);
+//       const accessToken = jwt.sign(
+//         {
+//           UserInfo: {
+//             username: user.username,
+//             roles: roles,
+//           },
+//         },
+//         process.env.ACCESS_SECRET,
+//         { expiresIn: '120s' }
+//       );
 
-      user.token = accessToken;
+//       const refreshToken = jwt.sign(
+//         { username: user.username },
+//         process.env.REFRESH_SECRET,
+//         { expiresIn: '1d' }
+//       );
 
-      //   await generateToken(res, id, email);
-      // console.log(accessToken);
-      // Store user details in session
-      //   req.session.user = {
-      //     first_name: user.first_name,
-      //     last_name: user.last_name,
-      //     phone_number: user.phone_number,
-      //     email: user.email,
-      //   };
-      const { password, ...others } = user._doc;
-      res.status(200).send({ ...others });
-      // res.status(200).send({ msg: 'You are logged in' });
-      return;
-    }
+//       user.refreshToken = refreshToken;
+//       // console.log(user);
+//       // console.log(roles);
 
-    return res.status(400).send({ msg: 'Invalid credentials' });
-  } catch (err) {
-    res.send({ msg: 'There is error logging in' });
-  }
-});
+//       const { password, ...others } = user._doc;
+//       // res.status(200).send({ ...others });
+//       // Creates Secure Cookie with refresh token
+//       res.cookie('jwt', refreshToken, {
+//         httpOnly: true,
+//         sameSite: 'None',
+//         maxAge: 24 * 60 * 60 * 1000,
+//       }); //secure: true, =>use this in production
 
-router.get('/logoutUser', (req, res) => {
-  const authHeader = req.headers['authorization'];
-  jwt.sign(authHeader, '', { expiresIn: 1 }, (logout, err) => {
-    if (logout) {
-      res.send('Logged out successfully');
-    } else {
-      res.send('Error logging out');
-    }
-  });
-});
+//       // Send authorization roles and access token to user
+//       return res.json({ ...others, accessToken });
+//       // res.status(200).send({ msg: 'You are logged in' });
+//     } else {
+//       return res.status(400).send({ msg: 'Invalid credentials' });
+//     }
+//   } catch (err) {
+//     res.send({ msg: 'There is error logging in' });
+//   }
+// });
 
-module.exports = router;
+// router.get('/logoutUser', async (req, res) => {
+//   const authHeader = req.headers['authorization'];
+
+//   // On client, also delete the accessToken
+
+//   const cookies = req.cookies;
+//   if (!cookies?.jwt) return res.sendStatus(204); //No content
+//   const refreshToken = cookies.jwt;
+
+//   // Is refreshToken in db?
+//   const foundUser = await User.findOne({ refreshToken }).exec();
+//   if (!foundUser) {
+//     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+//     return res.sendStatus(204);
+//   }
+
+//   // Delete refreshToken in db
+//   foundUser.refreshToken = '';
+//   const result = await foundUser.save();
+//   console.log(result);
+
+//   jwt.sign(authHeader, '', { expiresIn: 1 }, (logout, err) => {
+//     if (logout) {
+//       res.clearCookie('jwt', {
+//         httpOnly: true,
+//         sameSite: 'None',
+//         secure: true,
+//       });
+//       res.sendStatus(204);
+//       res.send('Logged out successfully');
+//     } else {
+//       res.send('Error logging out');
+//     }
+//   });
+// });
+
+// module.exports = router;

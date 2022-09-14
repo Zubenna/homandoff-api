@@ -45,16 +45,16 @@ const userSchema = new Schema(
       require: true,
       trim: true,
     },
-    token: {
-      type: String,
-      default: null,
-    },
 
     phone_number: {
       type: String,
       required: [true, 'Please enter your mobile number'],
       unique: [true, 'Number already in use'],
     },
+    // roles: {
+    //   type: [String],
+    //   default: ['Admin'],
+    // },
     isAdmin: {
       type: Boolean,
       default: false,
