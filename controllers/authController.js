@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-require('dotenv').config('.env');
+
 const login = asyncHandler(async (req, res) => {
   // Get user input
   const { email, password } = req.body;
