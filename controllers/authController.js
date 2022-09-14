@@ -55,7 +55,8 @@ const login = asyncHandler(async (req, res) => {
   };
 
   // Send user information and access token to user
-  return res.json({ accessToken, result });
+  // return res.json({ accessToken, result });
+  return res.status(200).send({ accessToken, result });
 });
 
 const refresh = asyncHandler(async (req, res) => {
