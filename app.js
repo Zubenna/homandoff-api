@@ -34,12 +34,12 @@ app.use('/', require('./routes/root'));
 // app.use(express.static("uploads"));
 // app.use(cors());
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: true,
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: true,
+//   })
+// );
 // app.options('corsOptions', cors());
 app.use('/', require('./routes/root'));
 app.use('/auth', require('./routes/authRoutes'));
