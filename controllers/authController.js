@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-
+require('dotenv').config('.env');
 const login = asyncHandler(async (req, res) => {
   // Get user input
   const { email, password } = req.body;
@@ -55,8 +55,8 @@ const login = asyncHandler(async (req, res) => {
   };
 
   // Send user information and access token to user
-  // return res.json({ accessToken, result });
-  return res.status(200).send({ accessToken, result });
+  return res.json({ accessToken, result });
+  // return res.status(200).send({ accessToken, result });
 });
 
 const refresh = asyncHandler(async (req, res) => {
