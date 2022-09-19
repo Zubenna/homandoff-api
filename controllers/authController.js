@@ -29,20 +29,20 @@ const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_SECRET,
-    { expiresIn: '15m' }
+    { expiresIn: '2m' }
   );
 
   const refreshToken = jwt.sign(
     { username: user.username },
     process.env.REFRESH_SECRET,
-    { expiresIn: '5h' }
+    { expiresIn: '4m' }
   );
 
   res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
     secure: true,
+    httpOnly: true,
     sameSite: 'None',
-    maxAge: 5 * 24 * 60 * 60 * 1000,
+    maxAge: 4 * 60 * 1000,
   });
 
   const result = {
@@ -64,15 +64,20 @@ const refresh = asyncHandler(async (req, res) => {
   console.log('cookies in refresh', cookies);
   if (!cookies?.refreshToken) {
     console.log('Inside unauthorized if for 403');
-    return res.status(403).json({ msg: 'Unauthorized' });
+    return res.sendStatus(403);
   }
   const refreshToken = cookies.refreshToken;
-  console.log('New refresh token', refreshToken);
+  // console.log('New refresh token', refreshToken);
+  // const foundUser = await User.findOne({ refreshToken }).exec();
+  // if (!foundUser) return res.sendStatus(403); //Forbidden
   jwt.verify(
     refreshToken,
     process.env.REFRESH_SECRET,
     asyncHandler(async (err, decoded) => {
-      if (err) return res.status(403).json({ msg: 'Forbidden' });
+      if (err) {
+        console.log('Returning error 403, Token expired');
+        return res.sendStatus(403);
+      }
 
       const foundUser = await User.findOne({
         username: decoded.username,
@@ -88,7 +93,7 @@ const refresh = asyncHandler(async (req, res) => {
           },
         },
         process.env.ACCESS_SECRET,
-        { expiresIn: '15m' }
+        { expiresIn: '120s' }
       );
       console.log('return something');
       console.log('current access token', accessToken);
@@ -97,16 +102,29 @@ const refresh = asyncHandler(async (req, res) => {
   );
 });
 
-const logout = (req, res) => {
+const logout = asyncHandler(async (req, res) => {
+  // console.log('Logout called from interceptor');
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
+  if (!cookies?.refreshToken) return res.sendStatus(204); //No content
+  const refreshToken = cookies.refreshToken;
+
+  // const foundUser = await User.findOne({ refreshToken }).exec();
+  // if (!foundUser) {
+  //   res.clearCookie('refreshToken', {
+  //     httpOnly: true,
+  //     sameSite: 'None',
+  //     secure: true,
+  //   });
+  //   return res.sendStatus(204);
+  // }
+  // res.json({ msg: 'Cookie cleared' });
   res.clearCookie('refreshToken', {
     httpOnly: true,
     sameSite: 'None',
     secure: true,
   });
-  res.json({ msg: 'Cookie cleared' });
-};
+  res.sendStatus(204);
+});
 
 // const logout = (req, res) => {
 //   const authHeader = req.headers['authorization'];
